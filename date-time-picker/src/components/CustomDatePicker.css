@@ -1,3 +1,13 @@
+:root {
+  --bg-color: white;
+  --hover-bg-color: #e6e6e6;
+  --selected-bg-color: #006edc;
+  --selected-text-color: white;
+  --today-bg-color: #ffff76;
+  --other-month-text-color: #757575;
+  --focus-outline-color: #006edc;
+}
+
 .calendar {
   display: flex;
   flex-direction: column;
@@ -7,35 +17,38 @@
   margin: 0 auto;
 }
 
-.month-selector {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin-bottom: 16px;
-}
-
-.top-month-selector {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 350px;
-  height: 44px;
-  text-align: center;
-}
-
+.month-selector,
+.top-month-selector,
 .select-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
+  width: 100%;
+}
+
+.month-selector {
+  margin-bottom: 16px;
+}
+
+.top-month-selector,
+.select-button {
   height: 44px;
-  background-color: white;
+  background-color: var(--bg-color);
   cursor: pointer;
 }
 
-.select-button:hover {
-  background-color: #e6e6e6;
+.select-button {
+  width: 44px;
+}
+
+.select-button:hover,
+.day:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.select-button:focus,
+.day:focus {
+  outline: 2px solid var(--focus-outline-color);
 }
 
 .days-grid {
@@ -44,7 +57,9 @@
   width: 100%;
 }
 
-.day {
+.day,
+.day.selected,
+.day.in-range {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,34 +70,16 @@
   font-size: 16px;
 }
 
-.day:hover {
-  background-color: #e6e6e6;
-}
-
-.day.selected {
-  background-color: #006edc;
-  color: white;
-}
-
+.day.selected,
 .day.in-range {
-  background-color: #006edc;
-  color: white;
-}
-
-.day.empty {
-  background: none;
-  cursor: default;
+  background-color: var(--selected-bg-color);
+  color: var(--selected-text-color);
 }
 
 .day.other-month {
-  color: #757575;
+  color: var(--other-month-text-color);
 }
 
-.month-selector span {
-  cursor: pointer;
-  user-select: none;
-}
-
-.today {
-  background-color: #ffff76;
+.day.today:not(.selected):not(.in-range) {
+  background-color: var(--today-bg-color);
 }

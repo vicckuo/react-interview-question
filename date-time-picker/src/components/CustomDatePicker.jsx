@@ -20,12 +20,13 @@ export const CustomDatePicker = () => {
     return new Date(year, month, 1).getDay();
   };
 
-  const selectDate = (date) => {
-    if (!startDate || date < startDate) {
-      setStartDate(date);
+  const selectDate = (year, month, day) => {
+    const newDate = new Date(year, month, day).setHours(0, 0, 0, 0);
+    if (!startDate || newDate < startDate.getTime() || (startDate && endDate && newDate < endDate.getTime())) {
+      setStartDate(new Date(newDate));
       setEndDate(null);
-    } else if (!endDate || date >= startDate) {
-      setEndDate(date);
+    } else if (!endDate || newDate > startDate.getTime()) {
+      setEndDate(new Date(newDate));
     }
   };
 
@@ -59,66 +60,58 @@ export const CustomDatePicker = () => {
   const renderDays = () => {
     const days = [];
     const firstDay = firstDayOfMonth(currentMonth, currentYear);
-    const previousMonthDays = daysInMonth(
-      currentMonth - 1 < 0 ? 11 : currentMonth - 1,
-      currentMonth - 1 < 0 ? currentYear - 1 : currentYear
-    );
+    const previousMonthDays = daysInMonth(currentMonth - 1 < 0 ? 11 : currentMonth - 1, currentYear);
     const totalDays = daysInMonth(currentMonth, currentYear);
     let prevMonthStart = previousMonthDays - firstDay + 1;
 
-    // Previous month's days
     for (let i = 0; i < firstDay; i++) {
-      days.push(
-        <span
-          key={`prev-${prevMonthStart}`}
-          className='day other-month'>
-          {prevMonthStart++}日
-        </span>
-      );
+      days.push(renderDay(prevMonthStart, currentMonth - 1, currentYear, true));
+      prevMonthStart++;
     }
 
-    // Current month's days
     for (let day = 1; day <= totalDays; day++) {
-      let className = 'day';
-      const dayDate = new Date(currentYear, currentMonth, day);
-      if (
-        (startDate && dayDate.getTime() === startDate.getTime()) ||
-        (endDate && dayDate.getTime() === endDate.getTime())
-      ) {
-        className += ' selected';
-      } else if (startDate && endDate && dayDate > startDate && dayDate < endDate) {
-        className += ' in-range';
-      }
-      if (day === todayDate && currentMonth === todayMonth && currentYear === todayYear) {
-        className += ' today'; // Add today's class
-      }
-      days.push(
-        <div
-          key={`current-${day}`}
-          className={className}
-          onClick={() => selectDate(dayDate)}>
-          {day}日
-        </div>
-      );
+      days.push(renderDay(day, currentMonth, currentYear, false));
     }
 
-    // Next month's days to fill the grid
-    const nextDays = 35 - days.length;
-    for (let i = 1; i <= nextDays; i++) {
-      days.push(
-        <span
-          key={`next-${i}`}
-          className='day other-month'>
-          {i}日
-        </span>
-      );
+    const daysInNextMonth = 35 - days.length;
+    for (let i = 1; i <= daysInNextMonth; i++) {
+      days.push(renderDay(i, currentMonth + 1, currentYear, true));
     }
 
     return days;
   };
 
-  console.log('startDate:', startDate);
-  console.log('endDate:', endDate);
+  const renderDay = (day, month, year, isOtherMonth) => {
+    const dayDate = new Date(year, month, day).setHours(0, 0, 0, 0);
+    const isToday = day === todayDate && month === todayMonth && year === todayYear;
+    let className = 'day';
+
+    if (startDate && dayDate === startDate.getTime()) {
+      className += ' selected';
+    } else if (endDate && dayDate === endDate.getTime()) {
+      className += ' selected';
+    } else if (startDate && endDate && dayDate > startDate.getTime() && dayDate < endDate.getTime()) {
+      className += ' in-range';
+    } else if (isOtherMonth) {
+      className += ' other-month';
+    }
+
+    if (isToday) {
+      className += ' today';
+    }
+
+    return (
+      <div
+        key={`${year}-${month}-${day}`}
+        className={className}
+        onClick={() => selectDate(year, month, day)}>
+        {day}日
+      </div>
+    );
+  };
+
+  console.log('startDate: ', startDate);
+  console.log('endDate: ', endDate);
 
   return (
     <div className='calendar'>

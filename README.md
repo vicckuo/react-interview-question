@@ -1,5 +1,12 @@
-# react-interview-question
+# react-interview-question2
 
-## react-question 分支 對應 react-question.pdf
+## node 與 npm 版本
 
-## react-question2 分支 對應 react-question2.pdf
+- Node v18.17.0
+- npm 9.6.7
+
+## 安装與啟動步骤
+
+- npm install
+- npm start
+- [http://localhose:3000](http://localhost:3000)

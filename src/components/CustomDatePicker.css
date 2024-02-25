@@ -1,0 +1,85 @@
+:root {
+  --bg-color: white;
+  --hover-bg-color: #e6e6e6;
+  --selected-bg-color: #006edc;
+  --selected-text-color: white;
+  --today-bg-color: #ffff76;
+  --other-month-text-color: #757575;
+  --focus-outline-color: #006edc;
+}
+
+.calendar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 350px;
+  height: 240px;
+  margin: 0 auto;
+}
+
+.month-selector,
+.top-month-selector,
+.select-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.month-selector {
+  margin-bottom: 16px;
+}
+
+.top-month-selector,
+.select-button {
+  height: 44px;
+  background-color: var(--bg-color);
+  cursor: pointer;
+}
+
+.select-button {
+  width: 44px;
+}
+
+.select-button:hover,
+.day:hover {
+  background-color: var(--hover-bg-color);
+}
+
+.select-button:focus,
+.day:focus {
+  outline: 2px solid var(--focus-outline-color);
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+}
+
+.day,
+.day.selected,
+.day.in-range {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 36px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.day.selected,
+.day.in-range {
+  background-color: var(--selected-bg-color);
+  color: var(--selected-text-color);
+}
+
+.day.other-month {
+  color: var(--other-month-text-color);
+}
+
+.day.today:not(.selected):not(.in-range) {
+  background-color: var(--today-bg-color);
+}
